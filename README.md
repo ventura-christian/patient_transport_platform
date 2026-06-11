@@ -1,10 +1,9 @@
 # VECTRIS
 
-**Patient Transport Coordination Platform**
+## Patient Transport Coordination Platform
 
 **Senior Project: GIT 480**  
 **Author:** Christian Ventura
-
 
 ## Project Overview
 
@@ -15,7 +14,6 @@ The project focuses on reducing communication delays, improving transport visibi
 Rather than functioning as a simple scheduling application, Vectris is being designed as a complete operational system that models real-world hospital transport workflows from request creation through transport completion.
 
 This repository contains all planning, research, architecture, documentation, development assets, and source code associated with the GIT 480 Senior Project.
-
 
 ## Project Information
 
@@ -28,7 +26,6 @@ This repository contains all planning, research, architecture, documentation, de
 | Focus Area | Backend Development |
 | Development Methodology | Systems-First Design |
 | Primary Goal | Healthcare Transportation Workflow Management |
-
 
 ## Problem Statement
 
@@ -43,7 +40,6 @@ These challenges often result in:
 - Poor resource utilization
 
 Vectris aims to centralize these operations through a structured workflow-driven platform.
-
 
 ## Project Objectives
 
@@ -66,8 +62,7 @@ Vectris aims to centralize these operations through a structured workflow-driven
 - Follow modern Git workflows
 - Produce professional engineering documentation
 
-
-# Repository Structure
+## Repository Structure
 
 ```text
 vectris/
@@ -82,11 +77,12 @@ vectris/
 ├── scripts/
 ├── tests/
 │
+├── PROJECT_STATE.md
 ├── README.md
 └── CHANGELOG.md
 ```
 
-# Directory Guide
+## Directory Guide
 
 ## api/
 
@@ -101,19 +97,18 @@ api/
 └── request-response-examples/
 ```
 
-### Purpose
+### API: Purpose
 
 - Define API contracts
 - Document endpoints
 - Standardize communication between systems
 - Support future frontend integration
 
-
 ## assets/
 
 Stores project assets and supporting resources.
 
-### Examples
+### Assets: Examples
 
 ```text
 assets/
@@ -124,13 +119,12 @@ assets/
 └── screenshots/
 ```
 
-### Purpose
+### Assets: Purpose
 
 - Visual references
 - UI planning materials
 - Presentation assets
 - Demonstration materials
-
 
 ## backend/
 
@@ -157,18 +151,17 @@ backend/
 └── utilities/
 ```
 
-### Purpose
+### Backend: Purpose
 
 - Core application functionality
 - Workflow orchestration
 - Data processing
 
-
 ## database/
 
 Contains all database-related artifacts.
 
-### Examples
+### Database: Examples
 
 ```text
 database/
@@ -179,19 +172,18 @@ database/
 └── queries/
 ```
 
-### Purpose
+### Database: Purpose
 
 - Entity definitions
 - Database planning
 - Migration history
 - Query optimization
 
-
 ## deployment/
 
 Contains deployment and infrastructure resources.
 
-### Examples
+### Deployment: Examples
 
 ```text
 deployment/
@@ -201,7 +193,7 @@ deployment/
 └── deployment-guides/
 ```
 
-### Purpose
+### Deployment: Purpose
 
 - Environment configuration
 - Infrastructure planning
@@ -212,7 +204,7 @@ deployment/
 
 Contains architectural and workflow visualizations.
 
-### Examples
+### Diagrams: Examples
 
 ```text
 diagrams/
@@ -223,13 +215,12 @@ diagrams/
 └── network/
 ```
 
-### Purpose
+### Diagrams: Purpose
 
 - System communication visualization
 - Workflow analysis
 - Architectural planning
 - Stakeholder communication
-
 
 ## docs/
 
@@ -245,10 +236,9 @@ docs/
 └── workflows/
 ```
 
-### Purpose
+### Docs: Purpose
 
 Maintain project knowledge throughout the software development lifecycle.
-
 
 ### docs/architecture/
 
@@ -278,7 +268,6 @@ Purpose:
 
 Document why decisions were made rather than only what was built.
 
-
 ### docs/operations/
 
 Operational procedures and support documentation.
@@ -289,7 +278,6 @@ Examples:
 - Monitoring strategies
 - Incident response planning
 - Maintenance processes
-
 
 ### docs/requirements/
 
@@ -336,12 +324,11 @@ Purpose:
 
 Translate real-world operations into system workflows.
 
-
 ## scripts/
 
 Utility scripts used during development.
 
-### Examples
+### Scripts: Examples
 
 ```text
 scripts/
@@ -351,19 +338,18 @@ scripts/
 └── automation/
 ```
 
-### Purpose
+### Scripts: Purpose
 
 - Environment setup
 - Data management
 - Developer productivity
 - Automation tasks
 
-
 ## tests/
 
 Contains testing resources.
 
-### Examples
+### Tests: Examples
 
 ```text
 tests/
@@ -373,14 +359,13 @@ tests/
 └── performance/
 ```
 
-### Purpose
+### Tests: Purpose
 
 - Validate functionality
 - Prevent regressions
 - Verify system behavior
 
-
-# Documentation Standards
+## Documentation Standards
 
 The project follows a documentation-first approach.
 
@@ -395,8 +380,7 @@ Documentation categories include:
 - Workflow Analysis
 - Decision Records
 
-
-# Development Philosophy
+## Development Philosophy
 
 This project follows a systems-first engineering approach.
 
@@ -412,8 +396,7 @@ Before implementation:
 
 The objective is to design a system before writing code.
 
-
-# Planned Core Features
+## Planned Core Features
 
 ## Request Management
 
@@ -447,8 +430,7 @@ The objective is to design a system before writing code.
 - Status changes
 - Assignment history
 
-
-# Technology Focus
+## Technology Focus
 
 This project serves as a practical demonstration of:
 
@@ -461,8 +443,7 @@ This project serves as a practical demonstration of:
 - Documentation Practices
 - Software Engineering Principles
 
-
-# Change Management
+## Change Management
 
 Project changes are tracked through:
 
@@ -477,8 +458,7 @@ The changelog documents:
 - Documentation updates
 - Architectural changes
 
-
-# Current Project Phase
+## Current Project Phase
 
 **Phase:** Planning and System Design
 
@@ -494,10 +474,9 @@ The changelog documents:
 
 Implementation will begin after foundational planning artifacts have been completed and reviewed.
 
-
 ## Author
 
 **Christian Ventura**  
 GIT 480 Senior Project
 
-**Vectris __ Patient Transport Coordination Platform**
+***Vectris __ Patient Transport Coordination Platform***
