@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from app.models.transport_request import TransportRequest
 from app.schemas.transport_request import TransportRequestCreate
+from app.models.request_assignment import RequestAssignment
+from app.models.transporter import Transporter
 from typing import Optional
 
 
@@ -57,6 +59,26 @@ def update_status(
 
         request.completed_at = datetime.now(timezone.utc)
 
+        # Free up every transporter who was assigned to this request.
+        assignments = (
+            db.query(RequestAssignment)
+            .filter(RequestAssignment.transport_request_id == request_id)
+            .all()
+        )
+        for assignment in assignments:
+            transporter = (
+                db.query(Transporter)
+                .filter(Transporter.id == assignment.transporter_id)
+                .first()
+            )
+            if transporter is not None:
+                transporter.status = 'available'
+
     db.commit()
     db.refresh(request)
     return request
+
+
+def get_all_requests(db: Session) -> list[TransportRequest]:
+    # Return every row in the transport_requests table.
+    return db.query(TransportRequest).all()
