@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.api import transport_requests, transporters, assignments
 from app.web import dashboard
+from app.web import transport_requests as web_transport_requests
+from app.web import assignments as web_assignments
 
 # Create the FastAPI application instance.
 app = FastAPI(
@@ -21,3 +23,5 @@ app.include_router(
     assignments.router, prefix='/assignments', tags=['Assignments']
 )
 app.include_router(dashboard.router)
+app.include_router(web_transport_requests.router)
+app.include_router(web_assignments.router)

@@ -1,0 +1,78 @@
+<!doctype html>
+{% extends "base.html" %} {% block title %}Create Request - Vectris{% endblock
+%} {% block content %}
+<h2>Create Transport Request</h2>
+
+<form method="post" action="/create-request">
+  <p>
+    <label for="patient_name">Patient Name</label>
+    <br />
+    <input type="text" id="patient_name" name="patient_name" required />
+  </p>
+
+  <p>
+    <label for="origin_department">Origin Department</label>
+    <br />
+    <select id="origin_department" name="origin_department" required>
+      <option value="">-- Select --</option>
+      {% for dept in departments %}
+      <option value="{{ dept }}">{{ dept }}</option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <p>
+    <label for="origin_room">Origin Room</label>
+    <br />
+    <input type="text" id="origin_room" name="origin_room" required />
+  </p>
+
+  <p>
+    <label for="destination_department">Destination Department</label>
+    <br />
+    <select id="destination_department" name="destination_department" required>
+      <option value="">-- Select --</option>
+      {% for dept in departments %}
+      <option value="{{ dept }}">{{ dept }}</option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <p>
+    <label for="equipment_needed">Equipment Needed</label>
+    <br />
+    <select id="equipment_needed" name="equipment_needed">
+      <option value="">None</option>
+      {% for item in equipment_options %}
+      <option value="{{ item }}">{{ item }}</option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <p>
+    <label>
+      <input type="checkbox" name="biohazard" value="true" />
+      Biohazard Precautions Required
+    </label>
+  </p>
+
+  <p>
+    <label for="transporters_required">Transporters Required</label>
+    <br />
+    <input
+      type="number"
+      id="transporters_required"
+      name="transporters_required"
+      value="1"
+      min="1"
+      required
+    />
+  </p>
+
+  <p>
+    <button type="submit">Submit Request</button>
+  </p>
+</form>
+
+<p><a href="/dashboard">Back to Dashboard</a></p>
+{% endblock %}
