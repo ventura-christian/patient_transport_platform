@@ -1,0 +1,66 @@
+<!doctype html>
+{% extends "base.html" %} {% block title %}Job Detail - Vectris{% endblock %} {%
+block content %}
+<h2>Job Detail</h2>
+
+{% if error %}
+<p style="color: red">
+  <strong>Error:</strong>
+  {{ error }}
+</p>
+{% endif %} {% if transport_request %}
+<section>
+  <p>
+    <strong>Patient:</strong>
+    {{ transport_request.patient_name }}
+  </p>
+  <p>
+    <strong>From:</strong>
+    {{ transport_request.origin_department }} - Room {{
+    transport_request.origin_room }}
+  </p>
+  <p>
+    <strong>To:</strong>
+    {{ transport_request.destination_department }}
+  </p>
+  <p>
+    <strong>Equipment:</strong>
+    {{ transport_request.equipment_needed or "None" }}
+  </p>
+  <p>
+    <strong>Biohazard:</strong>
+    {{ "Yes" if transport_request.biohazard else "No" }}
+  </p>
+  <p>
+    <strong>Status:</strong>
+    {{ transport_request.status }}
+  </p>
+
+  <p><strong>Assigned Transporter(s):</strong></p>
+  {% if assigned_transporters %}
+  <ul>
+    {% for t in assigned_transporters %}
+    <li>{{ t.name }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>None assigned yet.</p>
+  {% endif %} {% if transport_request.status == "in_progress" %} {% if
+  assigned_transporters|length >= transport_request.transporters_required %}
+  <form method="post" action="/requests/{{ transport_request.id }}/complete">
+    <button type="submit">Mark Complete</button>
+  </form>
+  {% else %}
+  <p>
+    This request need {{ transport_request.transporters_required }}
+    transporter(s) but only has {{ assigned_transporters|length }} assigned.
+    <a href="/assign/{{ transport_request.id }}">Assign another transporter</a>
+  </p>
+  {% endif %} {% endif %}
+</section>
+{% else %}
+<p>Request not found.</p>
+{% endif %}
+
+<p><a href="/dashboard">Back to Dashboard</a></p>
+{% endblock %}

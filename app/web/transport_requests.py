@@ -2,10 +2,14 @@ from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-
 from app.database.session import get_db
 from app.schemas.transport_request import TransportRequestCreate
 from app.services import transport_request_service
+from app.services import (
+    transport_request_service,
+    transporter_service,
+    assignment_service,
+)
 
 router = APIRouter()
 
@@ -68,4 +72,60 @@ def submit_create_request(
 
     # 303 tells the browser to re-fetch with GET, so a page refresh
     # afterward doesn't resubmit the form and duplicate the request.
+    return RedirectResponse(url='/dashboard', status_code=303)
+
+
+@router.get('/requests/{request_id}')
+def show_job_detail(
+    request_id: int, request: Request, db: Session = Depends(get_db)
+):
+    transport_request = transport_request_service.get_request_by_id(
+        db, request_id
+    )
+
+    assigned_transporters = []
+    if transport_request is not None:
+        assignments = assignment_service.get_assignments_for_request(
+            db, request_id
+        )
+        all_transporters = transporter_service.get_all_transporters(db)
+        for a in assignments:
+            for t in all_transporters:
+                if t.id == a.transporter_id:
+                    assigned_transporters.append(t)
+
+    context = {
+        'transport_request': transport_request,
+        'assigned_transporters': assigned_transporters,
+    }
+    return templates.TemplateResponse(request, 'job_detail.html', context)
+
+
+@router.post('/requests/{request_id}/complete')
+def complete_request(
+    request_id: int, request: Request, db: Session = Depends(get_db)
+):
+    try:
+        transport_request_service.update_status(db, request_id, 'complete')
+    except ValueError as e:
+        transport_request = transport_request_service.get_request_by_id(
+            db, request_id
+        )
+        assigned_transporters = []
+        if transport_request is not None:
+            assignments = assignment_service.get_assignments_for_request(
+                db, request_id
+            )
+            all_transporters = transporter_service.get_all_transporters(db)
+            for a in assignments:
+                for t in all_transporters:
+                    if t.id == a.transporter_id:
+                        assigned_transporters.append(t)
+        context = {
+            'transport_request': transport_request,
+            'assigned_transporters': assigned_transporters,
+            'error': str(e),
+        }
+        return templates.TemplateResponse(request, 'job_detail.html', context)
+
     return RedirectResponse(url='/dashboard', status_code=303)
