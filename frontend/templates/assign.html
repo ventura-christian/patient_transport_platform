@@ -1,0 +1,75 @@
+<!doctype html>
+{% extends "base.html" %} {% block title %}Assign Transporter - Vectris{%
+endblock %} {% block content %}
+<h2>Assign Transporter</h2>
+
+{% if error %}
+<p style="color: red">
+  <strong>Error:</strong>
+  {{ error }}
+</p>
+{% endif %} {% if transport_request %}
+<section>
+  <h3>Request Details</h3>
+  <p>
+    <strong>Patient:</strong>
+    {{ transport_request.patient_name }}
+  </p>
+  <p>
+    <strong>From:</strong>
+    {{ transport_request.origin_department }} - Room {{
+    transport_request.origin_room }}
+  </p>
+  <p>
+    <strong>To:</strong>
+    {{ transport_request.destination_department }}
+  </p>
+  <p>
+    <strong>Equipment:</strong>
+    {{ transport_request.equipment_needed or "None" }}
+  </p>
+  <p>
+    <strong>Biohazard:</strong>
+    {{ "Yes" if transport_request.biohazard else "No" }}
+  </p>
+  <p>
+    <strong>Transporters Required:</strong>
+    {{ transport_request.transporters_required }}
+  </p>
+</section>
+
+<section>
+  <h3>Available Transporters</h3>
+  {% if available_transporters %}
+  <form method="post" action="/assign/{{ transport_request.id }}">
+    <table border="1">
+      <tr>
+        <th>Name</th>
+        <th>Select</th>
+      </tr>
+      {% for t in available_transporters %}
+      <tr>
+        <td>{{ t.name }}</td>
+        <td>
+          <input
+            type="radio"
+            name="transporter_id"
+            value="{{ t.id }}"
+            required
+          />
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <button type="submit">Assign Selected Transporter</button>
+  </form>
+  {% else %}
+  <p>No transporters are currently available.</p>
+  {% endif %}
+</section>
+{% else %}
+<p>Request not found.</p>
+{% endif %}
+
+<p><a href="/dashboard">Back to Dashboard</a></p>
+{% endblock %}
