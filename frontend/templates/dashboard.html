@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Dashboard - Vectris{% endblock %} {%
+block content %}
+<section>
+  <p>
+    <strong>Waiting:</strong>
+    {{ waiting_count }}
+  </p>
+  <p>
+    <strong>In Progress:</strong>
+    {{ in_progress_count }}
+  </p>
+  <p>
+    <strong>Available Staff:</strong>
+    {{ available_count }}
+  </p>
+</section>
+
+<section>
+  <h2>Transport Queue</h2>
+  <table border="1">
+    <tr>
+      <th>Patient</th>
+      <th>Origin</th>
+      <th>Destination</th>
+      <th>Equipment</th>
+      <th>Status</th>
+    </tr>
+    {% for req in active_requests %}
+    <tr>
+      <td>{{ req.patient_name }}</td>
+      <td>{{ req.origin_department }} - Room {{ req.origin_room }}</td>
+      <td>{{ req.destination_department }}</td>
+      <td>{{ req.equipment_needed or "None" }}</td>
+      <td>{{ req.status }}</td>
+    </tr>
+    {% endfor %} {% for req in in_progress_requests %}
+    <tr>
+      <td>{{ req.patient_name }}</td>
+      <td>{{ req.origin_department }} - Room {{ req.origin_room }}</td>
+      <td>{{ req.destination_department }}</td>
+      <td>{{ req.equipment_needed or "None" }}</td>
+      <td>{{ req.status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>Transport Staff</h2>
+  <table border="1">
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+    </tr>
+    {% for t in transporters %}
+    <tr>
+      <td>{{ t.name }}</td>
+      <td>{{ t.status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endblock %}
