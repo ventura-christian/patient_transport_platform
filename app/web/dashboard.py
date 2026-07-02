@@ -3,7 +3,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app.database.session import get_db
-from app.services import transport_request_service, transporter_service
+from app.services import (
+    transport_request_service,
+    transporter_service,
+    assignment_service,
+)
 
 router = APIRouter()
 
@@ -21,6 +25,16 @@ def show_dashboard(request: Request, db: Session = Depends(get_db)):
     in_progress_requests = [
         r for r in all_requests if r.status == 'in_progress'
     ]
+
+    # For each in-progress request, work out whether it still needs
+    # more transporters than it currently has. Attached directly to
+    # the object (not saved to the database) so the template can
+    # read it without a second lookup of its own.
+    for req in in_progress_requests:
+        assignments = assignment_service.get_assignments_for_request(
+            db, req.id
+        )
+        req.needs_more_staff = len(assignments) < req.transporters_required
 
     context = {
         'active_requests': active_requests,

@@ -1,3 +1,4 @@
+<!doctype html>
 {% extends "base.html" %} {% block title %}Dashboard - Vectris{% endblock %} {%
 block content %}
 <section>
@@ -24,6 +25,7 @@ block content %}
       <th>Destination</th>
       <th>Equipment</th>
       <th>Status</th>
+      <th>Action</th>
     </tr>
     {% for req in active_requests %}
     <tr>
@@ -32,6 +34,7 @@ block content %}
       <td>{{ req.destination_department }}</td>
       <td>{{ req.equipment_needed or "None" }}</td>
       <td>{{ req.status }}</td>
+      <td><a href="/assign/{{ req.id }}">Assign</a></td>
     </tr>
     {% endfor %} {% for req in in_progress_requests %}
     <tr>
@@ -40,6 +43,12 @@ block content %}
       <td>{{ req.destination_department }}</td>
       <td>{{ req.equipment_needed or "None" }}</td>
       <td>{{ req.status }}</td>
+      <td>
+        {% if req.needs_more_staff %}
+        <a href="/assign/{{ req.id }}">Assign More</a>
+        {% endif %}
+      </td>
+      <td><a href="/requests/{{ req.id }}">View</a></td>
     </tr>
     {% endfor %}
   </table>

@@ -27,10 +27,23 @@ def create_assignment(
     if transporter is None:
         raise ValueError(f'Transporter {transporter_id} not found.')
 
-    # Reject if the request isn't active.
-    if request.status != 'active':
+    # A request can receive assignments while active or already in
+    # progress. Complete requests are closed to new assignments.
+    if request.status not in ('active', 'in_progress'):
         raise ValueError(
-            f'Request {request_id} is not active and cannot be assigned.'
+            f'Request {request_id} is {request.status} and cannot be assigned.'
+        )
+
+    # Don't allow more transporters than the request actually needs.
+    current_assignment_count = (
+        db.query(RequestAssignment)
+        .filter(RequestAssignment.transport_request_id == request_id)
+        .count()
+    )
+    if current_assignment_count >= request.transporters_required:
+        raise ValueError(
+            f'Request {request_id} '
+            'already has all required transporters assigned.'
         )
 
     # Reject if the transporter isn't available.
@@ -44,7 +57,7 @@ def create_assignment(
     )
     db.add(assignment)
 
-    # Update both statuses to reflect the new state.
+    # Update bot statuses to reflect the new state.
     request.status = 'in_progress'
     transporter.status = 'on_job'
 

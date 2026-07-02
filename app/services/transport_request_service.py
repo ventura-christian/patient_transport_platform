@@ -32,6 +32,18 @@ def create_request(
     return request
 
 
+def get_request_by_id(
+    db: Session, request_id: int
+) -> Optional[TransportRequest]:
+    # Look up a single request by id. Returns None if it doesn't
+    # exist so the caller can decide how to handle that.
+    return (
+        db.query(TransportRequest)
+        .filter(TransportRequest.id == request_id)
+        .first()
+    )
+
+
 def update_status(
     db: Session, request_id: int, new_status: str
 ) -> Optional[TransportRequest]:
@@ -50,6 +62,20 @@ def update_status(
         raise ValueError(
             f"Cannot transition from '{request.status}' to '{new_status}'"
         )
+
+    # A request can't be marked complete until it has the number of
+    # transporters it originally asked for.
+    if new_status == 'complete':
+        assignment_count = (
+            db.query(RequestAssignment)
+            .filter(RequestAssignment.transport_request_id == request_id)
+            .count()
+        )
+        if assignment_count < request.transporters_required:
+            raise ValueError(
+                f'Request {request_id} needs {request.transporters_required} '
+                f'transporter(s) but only has {assignment_count} assigned.'
+            )
 
     request.status = new_status
 
