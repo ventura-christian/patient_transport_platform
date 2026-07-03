@@ -1,6 +1,6 @@
 # LEARNING STATE
 
-> Last Updated: July 1, 2026
+> Last Updated: July 2, 2026
 
 Understood:
 
@@ -54,6 +54,16 @@ Understood:
 - Checking a UI mockup against an already-decided schema instead of building straight from the mockup
 - Deriving a second UI signal (delayed) from the same time-based pattern used for priority
 - A service function that reaches into more than one table in a single operation
+- Jinja2 template inheritance with {% extends %} and {% block %}
+- Why HTML form submissions need Form() parameters instead of a Pydantic request body, and why that requires python-multipart
+- The difference between an unchecked checkbox (field missing entirely) and an empty dropdown (field present as an empty string), and converting the empty string to None before it reaches a Pydantic schema
+- The POST-redirect-GET pattern: returning a 303 after a form submission so a page refresh doesn't resubmit it
+- Catching a service-layer ValueError inside a web route and re-rendering the same page with an error, instead of letting FastAPI return an unhandled 500
+- Jinja2 and Django use the same {% %} template syntax by design, but Jinja2 is a separate library with no Django dependency
+- Attaching a computed value directly to a SQLAlchemy object in a route handler so a template can read it, without saving it or writing a new service function
+- Reading a raw traceback to diagnose a library version-compatibility bug, not a mistake in my own code
+- Telling the difference between a business-rule gap worth fixing now and one worth only documenting
+- Resolving a stale git index.lock file
 
 Partially Understood:
 
@@ -67,4 +77,4 @@ Not Learned Yet:
 
 Current Learning Objective:
 
-- Write the transporter API endpoints, then update the dashboard templates to match the corrected wireframe
+- Add the dashboard's delayed panel and transporter current-assignment lookup, then fill out docs/testing_checklist.md

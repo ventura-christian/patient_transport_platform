@@ -1,6 +1,6 @@
 # Vectris Software Architecture Decisions & Explanations
 
-Last Updated: June 29, 2026
+> Last Updated: June 29, 2026
 
 ## Architecture Type
 
