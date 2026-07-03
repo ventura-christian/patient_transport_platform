@@ -1,6 +1,6 @@
 # Vectris Software Architecture Decisions & Explanations
 
-> Last Updated: June 29, 2026
+> Last Updated: July 2, 2026
 
 ## Architecture Type
 
@@ -389,6 +389,14 @@ Separate schemas let me explicitly control at each boundary.
 
 ## File `transport_request_service.py`
 
-This file implements the business logic for transport requests. 
+This file implements the business logic for transport requests.
 
 It enforces the status state machine (`active` -> `in_progress` -> `complete`), sets `completed_at` when a request is closed, and is the only place in the codebase that decides how a request changes state.
+
+### File `app/web/dashboard.py`, `app/web/transport_requests.py`, `app/web/assignments.py`
+
+What these files do:
+
+- This is the HTML-rendering counterpart to app/api/. Each one is a router, same as the API layer, except every route returns a rendered Jinja2 template or a redirect instead of a response_model.
+- They call the same service-layer functions the API layer calls. A dashboard page load and a POST /transport-requests/ call both run through create_request in the end. The only difference is what the route does with the result afterward.
+- Form submissions arrive through FastAPI's Form() parameters, not a Pydantic request body, because a browser `<form>` sends application/x-www-form-urlencoded data, not JSON. Parsing that requires the python-multipart package.
