@@ -1,6 +1,6 @@
 # Repository Map
 
-> Last Updated: June 28, 2026
+> Last Updated: July 2, 2026
 
 ## Purpose(repository map)
 
@@ -28,6 +28,7 @@ Each directory has a single, clearly defined responsibility.
 vectris/
 ├── app/
 │   ├── api/
+│   ├── web/
 │   ├── database/
 │   ├── models/
 │   └── services/
@@ -85,6 +86,32 @@ Implements the API layer.
 ### Guiding Principle(api)
 
 This layer should contain minimal business logic and primarily coordinate request and response handling.
+
+---
+
+## app/web/
+
+### Purpose(web)
+
+Implements the HTML-rendering layer for the dispatcher dashboard.
+
+### Responsibilities(web)
+
+- Render Jinja2 templates for the dashboard, create request, assign transporter, and job detail screens
+- Parse HTML form submissions
+- Call business services
+- Redirect the browser after a successful form submission
+
+### Examples(web)
+
+- Show the dashboard
+- Show and submit the create request form
+- Show and submit the assign transporter form
+- Show job detail and submit request completion
+
+### Guiding Principle(web)
+
+This layer mirrors app/api/ but returns rendered HTML instead of JSON. Like app/api/, it should carry minimal business logic and coordinate between the browser and the service layer, nothing more.
 
 ---
 
@@ -202,6 +229,8 @@ Implements the dispatcher dashboard.
 ### Guiding Principle(frontend)
 
 The dashboard exists to support operational awareness rather than data entry.
+
+- frontend/templates/ now holds the actual Jinja2 template files: base.html, dashboard.html, create_request.html, assign.html, and job_detail.html.
 
 ---
 
