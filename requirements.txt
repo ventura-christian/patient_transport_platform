@@ -1,9 +1,9 @@
-fastapi
-uvicorn
-sqlalchemy
-alembic
-psycopg2-binary
-pydantic
-python-dotenv
-jinja2
-python-multipart==<version pip installs>
+fastapi==0.138.0
+uvicorn==0.49.0
+sqlalchemy==2.0.51
+alembic==1.18.4
+psycopg2-binary==2.9.12
+pydantic==2.13.4
+python-dotenv==1.2.2
+jinja2==3.1.6
+python-multipart==0.0.32

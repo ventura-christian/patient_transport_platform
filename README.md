@@ -230,59 +230,62 @@ This avoids complexity and removes subjective prioritization logic.
 
 ### Phase
 
-Domain Modeling & System Design
+Frontend Verification & Polish
 
 ### Current Focus
 
-Define core entities:
-
-- Transport Request
-
-- Transporter
-
-- Assignment
-
-- Dispatch Event
-
-These entities will drive:
-
-Database → API → Dashboard
+All three MVP workflows work end to end through the dispatcher dashboard: create a request, assign a transporter, complete a request. Remaining work is the dashboard's delayed panel, a full testing pass, and presentation materials.
 
 ## Running Locally
 
 Vectris needs Python 3.11+ and a running PostgreSQL instance.
 
-1. Clone the repo and set up a virtual environment:
+Clone the repo and set up a virtual environment:
 
-   ```bash
+```bash
    python -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
-   ```
+```
 
-2. Create a `.env` file with your database connection string:
+Create the PostgreSQL database:
 
-   ```env
-   DATABASE_URL=postgresql://user:password@localhost/vectris
-   ```
+```bash
+   createdb vectris
+```
 
-3. Apply the database migrations:
+   If `createdb` isn't on your PATH or you get a role/permission error, connect with `psql` and run it manually instead:
 
-   ```bash
+```bash
+   psql -U postgres -c "CREATE DATABASE vectris;"
+```
+
+Create a `.env` file with your database connection string:
+
+```env
+   DATABASE_URL=postgresql://localhost/vectris
+```
+
+   If your PostgreSQL setup requires a username and password, use
+   `postgresql://user:password@localhost/vectris` instead.
+
+Apply the database migrations:
+
+```bash
    alembic upgrade head
-   ```
+```
 
-4. Start the server:
+Start the server:
 
-   ```bash
+```bash
    uvicorn main:app --reload
-   ```
+```
 
-5. Open `http://127.0.0.1:8000/docs` in a browser. This is FastAPI's auto-generated Swagger UI, and it's the current way to interact with Vectris. Every endpoint is listed there with a form to test it directly, no separate client needed.
+Open `http://127.0.0.1:8000` in a browser to reach the dispatcher dashboard, or `http://127.0.0.1:8000/docs` for the Swagger API reference.
 
 ### Current Status
 
-Vectris is still under active development. See `docs/build_state.md` for exactly what's working right now.
+All three MVP workflows are functional through the dashboard. See `docs/build_state.md` for exactly what's working right now.
 
 ## Repository Structure
 
