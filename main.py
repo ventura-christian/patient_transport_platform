@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from app.api import transport_requests, transporters, assignments
 from app.web import dashboard
 from app.web import transport_requests as web_transport_requests
@@ -9,6 +10,9 @@ app = FastAPI(
     title='Vectris',
     description='Hospital Patient Transport Operations Platform',
 )
+
+# Serve CSS from frontend/static so templates can link to it.
+app.mount('/static', StaticFiles(directory='frontend/static'), name='static')
 
 # Register each router with a URL prefix and a tag for the auto-generated docs.
 app.include_router(
