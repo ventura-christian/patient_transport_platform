@@ -2,7 +2,7 @@
 
 Hospital Patient Transport Operations Platform
 
-> Last Project Update: July 2, 2026
+> Last Project Update: July 3, 2026
 
 ## Project Overview
 
@@ -244,7 +244,21 @@ Clone the repo and set up a virtual environment:
 
 ```bash
    python -m venv venv
-   source venv/bin/activate
+```
+
+Activate it — the command depends on your shell:
+
+| Shell                    | Command                     |
+| ------------------------ | --------------------------- |
+| macOS/Linux (bash/zsh)   | `source venv/bin/activate`  |
+| Windows (Command Prompt) | `venv\Scripts\activate.bat` |
+| Windows (PowerShell)     | `venv\Scripts\Activate.ps1` |
+
+---
+
+Then install dependencies:
+
+```bash
    pip install -r requirements.txt
 ```
 
