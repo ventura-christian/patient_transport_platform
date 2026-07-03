@@ -1,6 +1,6 @@
 # BUILD STATE
 
-Last Updated: June 29, 2026
+Last Updated: July 2, 2026
 
 Completed:
 
@@ -40,6 +40,14 @@ Completed:
 - main.py — FastAPI app entry point with three routers registered
 - app/api/__init__.py, transport_requests.py, transporters.py, assignments.py — router stubs created
 - app/services/transport_request_service.py — create_request and update_status
+- app/web/__init__.py, app/web/dashboard.py — Jinja2 wiring and dashboard route
+- frontend/templates/base.html, dashboard.html — dashboard screen
+- app/web/transport_requests.py, frontend/templates/create_request.html — create request screen
+- app/web/assignments.py, frontend/templates/assign.html — assign transporter screen
+- transport_request_service.py: get_request_by_id, job detail routes, frontend/templates/job_detail.html — job detail and completion screen
+- assignment_service.py: create_assignment now allows multiple transporters per request, up to transporters_required
+- transport_request_service.py: update_status blocks completion until a request is fully staffed
+- python-multipart added for HTML form parsing
 
 In Progress:
 
@@ -51,12 +59,9 @@ Broken:
 
 Not Started:
 
-- Frontend dispatcher dashboard
-- Testing
+- Automated tests
 - Deployment
 - Presentation materials
-- Service layer — transporter_service.py and assignment_service.py remaining
-- API endpoints — transport_requests.py, transporters.py, assignments.py
 
 Technical Debt:
 
@@ -66,7 +71,9 @@ Technical Debt:
 - Status values enforced in app code only, not at the database level
 - Department names are free text with no validation
 - Cascade behavior on foreign key deletes not defined
+- Dashboard checks each in-progress request's assignment count with a separate query per row, not one join. Fine at this scale, would need a rewrite if the queue grew large.
+- requirements.txt had an unpinned dependency list and one literal placeholder line for python-multipart. Fixed alongside this update.
 
 Next Task:
 
-- Write app/services/transporter_service.py
+- (Potential Idea): Add the dashboard's delayed panel
