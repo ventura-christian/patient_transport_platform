@@ -1,6 +1,6 @@
 # DECISIONS
 
-> Last Updated: July 1, 2026
+> Last Updated: July 2, 2026
 
 ---
 
@@ -225,3 +225,53 @@ The dashboard needs a panel showing requests that need attention, but nothing in
 I considered a stored column for this, something like is_delayed or flagged, set manually or by a background check. Instead I derive it the same way I derive priority: a request counts as delayed once it's been active past a fixed time threshold, calculated from created_at. No new column, no new place for the data to drift out of sync.
 
 The limitation is that this only measures how long something's been waiting, not why. A request stuck because equipment isn't available looks identical to one stuck because nobody's picked it up yet. A stored reason field would fix that, but it's not something the three MVP workflows need.
+
+## Frontend Routes Live in app/web/, Not app/api/
+
+repository_map.md already defines app/api/ as the JSON REST layer. Rather than mixing HTML-rendering routes into it, I created a parallel app/web/ package that follows the exact same pattern: a router, calling the service layer directly, no business logic in the route itself. The only difference is what it returns. app/api/ routes return a response_model. app/web/ routes return a rendered Jinja2 template or a redirect.
+
+---
+
+## HTML Forms Use FastAPI's Form(), Not the Pydantic Request Body
+
+My API routes take a Pydantic model as the request body, because Swagger and any JSON client send JSON. A browser `<form>` doesn't send JSON. It sends application/x-www-form-urlencoded data, and FastAPI reads that through individual Form() parameters instead, which requires the python-multipart package.
+
+Two form quirks came out of this. An unchecked checkbox sends nothing at all, not "false" — the biohazard field relies on that absence to default to False, and I set the checkbox's value to "true" so a checked box sends something FastAPI can convert to a real boolean. An unselected dropdown sends an empty string, not null. The create-request route converts that empty string to None by hand before building the TransportRequestCreate schema, since the database column expects null for "no equipment," not an empty string.
+
+---
+
+## Every Form Submission Redirects With a 303, Not a Direct Render
+
+After a successful POST on the create-request, assign, or complete-request routes, the handler returns a redirect to /dashboard with a 303 status instead of rendering a page directly. A 303 specifically tells the browser to re-fetch the next page with GET. Without it, refreshing the confirmation page would resubmit the same form and create a duplicate transport request or assignment.
+
+---
+
+## Web Routes Catch Service-Layer Errors Instead of Crashing
+
+My API layer already turns a service-layer ValueError into a clean 400 response. The web layer needed the same protection for a human instead of a client library: the assign and complete-request POST handlers wrap the service call in try/except ValueError and re-render the same screen with the error shown inline, rather than letting FastAPI return its default unhandled-exception page. Given how much a demo depends on nothing crashing in front of faculty, the extra few lines on every form-submitting route were worth it.
+
+---
+
+## Multiple Transporters Per Request: Fixing assignment_service.py
+
+**Problem:** transporters_required already existed as a schema field, but create_assignment rejected any request that wasn't status active, and the very first assignment flipped status to in_progress. A request needing 2 or more transporters could only ever receive one — the field was stored but never enforced.
+
+**Alternatives Considered:** Leave it alone and document it as a known limitation, since the default is 1 transporter and none of the three MVP workflows strictly require more. Or fix the underlying logic properly.
+
+**Chosen Approach:** Fixed it. create_assignment now accepts a request that's active or already in_progress, and rejects a new assignment once the request already has enough transporters. update_status adds a guard before allowing the in_progress → complete transition: the assignment count has to meet transporters_required, or the transition gets rejected with a message naming exactly how many are still needed.
+
+**Advantages:** transporters_required is a real constraint now, not just a display field. A dispatcher can't close out an understaffed job by mistake.
+
+**Disadvantages / Tradeoffs:** Touches five files across the service and web layers instead of staying contained to one. The dashboard now runs one query per in-progress request to know whether it still needs staff, a loop rather than a single join.
+
+**Risks:** Low. The change is additive to logic already exercised by the default single-transporter case, and that case got retested after the change.
+
+**Future Improvements:** Collapse the per-row assignment-count query in the dashboard route into a single join if the request queue ever grows large enough to matter.
+
+**One-Sentence Defense:** The schema already promised multi-transporter support, so I closed the gap between what the data model allowed and what the business logic actually enforced.
+
+---
+
+## Computed Display Values Get Attached to the Object, Not Given Their Own Service Function
+
+The dashboard needs to know, for each in-progress request, whether it still needs more staff. Instead of writing a new service function to answer one boolean question, the dashboard route attaches it directly to the already-fetched SQLAlchemy object as a plain attribute — req.needs_more_staff — right before passing it to the template. Nothing about this touches the database. It only exists for the life of that one request. Fine for a single screen. If a second screen needed the same value, that's the point where it should become a real service function instead of a copy-pasted loop.
