@@ -1,10 +1,10 @@
 # PROJECT_STATE
 
-Last Updated: June 29, 2026
+Last Updated: July 2, 2026
 
 ## Current Phase
 
-API Layer
+Frontend Verification & Polish
 
 ## Project Summary
 
@@ -57,16 +57,22 @@ Completed:
 - main.py created — FastAPI app boots and serves /docs
 - get_db() dependency injection added to session.py
 - transport_request_service.py written — create and status update
+- Jinja2 wired into FastAPI through a new app/web/ package
+- Dashboard screen: request queue, transporter staff panel, stat counts
+- Create Request screen, including HTML form parsing with Form()
+- Assign Transporter screen
+- Job Detail screen with request completion
+- All three MVP workflows (create, assign, complete) reachable end to end through the dashboard
+- Multiple transporters per request now enforced, not just stored
 
 In Progress:
 
-- API Layer
+- Dashboard delayed panel
+- Transporter Staff panel showing current assignment
 
 Not Started:
 
-- Database implementation
-- API implementation
-- Frontend implementation
+- Automated tests
 - Deployment
 
 ## Technology Direction
@@ -97,7 +103,7 @@ Architecture:
 
 ## Next Actions
 
-1. Write transporter_service.py
-2. Write assignment_service.py
-3. Write API endpoints (transport_requests, transporters, assignments)
-4. Build dispatcher dashboard
+1. Add the dashboard's delayed panel and transporter current-assignment lookup
+2. Fill out docs/testing_checklist.md for all four screens
+3. Fix README setup instructions and pin requirements.txt
+4. Presentation materials
