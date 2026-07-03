@@ -1,72 +1,80 @@
-<!doctype html>
 {% extends "base.html" %} {% block title %}Dashboard - Vectris{% endblock %} {%
 block content %}
-<section>
-  <p>
-    <strong>Waiting:</strong>
-    {{ waiting_count }}
-  </p>
-  <p>
-    <strong>In Progress:</strong>
-    {{ in_progress_count }}
-  </p>
-  <p>
-    <strong>Available Staff:</strong>
-    {{ available_count }}
-  </p>
+
+<section class="stats">
+  <div class="stat-card">
+    <div class="stat-label">Waiting</div>
+    <div class="stat-value">{{ waiting_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">In Progress</div>
+    <div class="stat-value">{{ in_progress_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Available Staff</div>
+    <div class="stat-value">{{ available_count }}</div>
+  </div>
 </section>
 
-<section>
-  <h2>Transport Queue</h2>
-  <table border="1">
-    <tr>
-      <th>Patient</th>
-      <th>Origin</th>
-      <th>Destination</th>
-      <th>Equipment</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
+<div class="dashboard-grid">
+  <section class="panel">
+    <h2>Transport Queue</h2>
+
     {% for req in active_requests %}
-    <tr>
-      <td>{{ req.patient_name }}</td>
-      <td>{{ req.origin_department }} - Room {{ req.origin_room }}</td>
-      <td>{{ req.destination_department }}</td>
-      <td>{{ req.equipment_needed or "None" }}</td>
-      <td>{{ req.status }}</td>
-      <td><a href="/assign/{{ req.id }}">Assign</a></td>
-    </tr>
+    <div class="request-card">
+      <div class="request-info">
+        <strong>{{ req.patient_name }}</strong>
+        <div class="request-meta">
+          {{ req.origin_department }} - Room {{ req.origin_room }} &rarr; {{
+          req.destination_department }} {% if req.equipment_needed %} &middot;
+          {{ req.equipment_needed }} {% endif %}
+        </div>
+      </div>
+      <span class="badge badge-active">Active</span>
+      {% if req.biohazard %}
+      <span class="badge badge-urgent">Biohazard</span>
+      {% endif %}
+      <a class="btn-link" href="/assign/{{ req.id }}">Assign</a>
+    </div>
     {% endfor %} {% for req in in_progress_requests %}
-    <tr>
-      <td>{{ req.patient_name }}</td>
-      <td>{{ req.origin_department }} - Room {{ req.origin_room }}</td>
-      <td>{{ req.destination_department }}</td>
-      <td>{{ req.equipment_needed or "None" }}</td>
-      <td>{{ req.status }}</td>
-      <td>
-        {% if req.needs_more_staff %}
-        <a href="/assign/{{ req.id }}">Assign More</a>
-        {% endif %}
-      </td>
-      <td><a href="/requests/{{ req.id }}">View</a></td>
-    </tr>
-    {% endfor %}
-  </table>
-</section>
+    <div class="request-card">
+      <div class="request-info">
+        <strong>{{ req.patient_name }}</strong>
+        <div class="request-meta">
+          {{ req.origin_department }} - Room {{ req.origin_room }} &rarr; {{
+          req.destination_department }} {% if req.equipment_needed %} &middot;
+          {{ req.equipment_needed }} {% endif %}
+        </div>
+      </div>
+      <span class="badge badge-progress">In Progress</span>
+      {% if req.biohazard %}
+      <span class="badge badge-urgent">Biohazard</span>
+      {% endif %} {% if req.needs_more_staff %}
+      <a class="btn-link" href="/assign/{{ req.id }}">Assign More</a>
+      {% endif %}
+      <a class="btn-link" href="/requests/{{ req.id }}">View</a>
+    </div>
+    {% endfor %} {% if not active_requests and not in_progress_requests %}
+    <p class="empty-state">No requests in the queue.</p>
+    {% endif %}
+  </section>
 
-<section>
-  <h2>Transport Staff</h2>
-  <table border="1">
-    <tr>
-      <th>Name</th>
-      <th>Status</th>
-    </tr>
+  <section class="panel">
+    <h2>Transport Staff</h2>
     {% for t in transporters %}
-    <tr>
-      <td>{{ t.name }}</td>
-      <td>{{ t.status }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-</section>
+    <div class="staff-card">
+      <span class="staff-name">{{ t.name }}</span>
+      {% if t.status == "available" %}
+      <span class="badge badge-available">Available</span>
+      {% elif t.status == "on_job" %}
+      <span class="badge badge-onjob">On Job</span>
+      {% else %}
+      <span class="badge badge-onbreak">On Break</span>
+      {% endif %}
+    </div>
+    {% endfor %} {% if not transporters %}
+    <p class="empty-state">No staff on record.</p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}
