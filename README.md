@@ -240,13 +240,17 @@ All three MVP workflows work end to end through the dispatcher dashboard: create
 
 Vectris needs Python 3.11+ and a running PostgreSQL instance.
 
+---
+
 Clone the repo and set up a virtual environment:
 
 ```bash
    python -m venv venv
 ```
 
-Activate it — the command depends on your shell:
+Activate it.
+
+The command depends on your shell:
 
 | Shell                    | Command                     |
 | ------------------------ | --------------------------- |
@@ -289,6 +293,16 @@ Apply the database migrations:
    alembic upgrade head
 ```
 
+Load sample data (a handful of transporters and transport requests, so the
+dashboard isn't empty on first run). 
+
+Safe to run more than once as the script will check
+for existing rows first:
+
+```bash
+   python seed.py
+```
+
 Start the server:
 
 ```bash
@@ -305,28 +319,63 @@ All three MVP workflows are functional through the dashboard. See `docs/build_st
 
 ```text
 vectris/
-│
 ├── app/
-    ├── api/
-    ├── database/
-    ├── models/
-        ├── entities.md
-    ├── services/
+│   ├── api/
+│   │   ├── assignments.py
+│   │   ├── transport_requests.py
+│   │   └── transporters.py
+│   ├── database/
+│   │   └── session.py
+│   ├── models/
+│   │   ├── entities.md
+│   │   ├── request_assignment.py
+│   │   ├── transport_request.py
+│   │   └── transporter.py
+│   ├── schemas/
+│   │   ├── assignment.py
+│   │   ├── transport_request.py
+│   │   └── transporter.py
+│   ├── services/
+│   │   ├── assignment_service.py
+│   │   ├── transport_request_service.py
+│   │   └── transporter_service.py
+│   └── web/
+│       ├── assignments.py
+│       ├── dashboard.py
+│       └── transport_requests.py
 ├── archive/
-    ├── project_state_v1.md
+│   └── project_state_v1.md
 ├── docs/
-    ├── architecture.md
-    ├── backlog.md
-    ├── build_state.md
-    ├── decisions.md
-    ├── diagrams.md
-    ├── learning_state.md
-    ├── project_state.md
-    ├── repository_map.md
+│   ├── architecture.md
+│   ├── backlog.md
+│   ├── build_state.md
+│   ├── decisions.md
+│   ├── diagrams.md
+│   ├── learning_state.md
+│   ├── project_state.md
+│   ├── repository_map.md
+│   └── testing_checklist.md
 ├── frontend/
+│   ├── static/
+│   │   └── css/
+│   │       └── style.css
+│   └── templates/
+│       ├── assign.html
+│       ├── base.html
+│       ├── create_request.html
+│       ├── dashboard.html
+│       └── job_detail.html
+├── migrations/
+│   ├── versions/
+│   │   └── a53089e44fe7_create_initial_tables.py
+│   ├── env.py
+│   └── script.py.mako
 ├── tests/
+├── alembic.ini
+├── main.py
 ├── README.md
 ├── requirements.txt
+└── seed.py
 ```
 
 ---
