@@ -1,6 +1,6 @@
 # DECISIONS
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 ---
 
@@ -275,3 +275,89 @@ My API layer already turns a service-layer ValueError into a clean 400 response.
 ## Computed Display Values Get Attached to the Object, Not Given Their Own Service Function
 
 The dashboard needs to know, for each in-progress request, whether it still needs more staff. Instead of writing a new service function to answer one boolean question, the dashboard route attaches it directly to the already-fetched SQLAlchemy object as a plain attribute — req.needs_more_staff — right before passing it to the template. Nothing about this touches the database. It only exists for the life of that one request. Fine for a single screen. If a second screen needed the same value, that's the point where it should become a real service function instead of a copy-pasted loop.
+
+## Deploying to Render Instead of GitHub Pages or Staying Local-Only
+
+**Problem:** A README with setup instructions asks a grader to install Python, PostgreSQL, and run six commands correctly before seeing anything. I wanted a link that just works.
+
+**Alternatives Considered:** GitHub Pages (ruled out immediately because it only serves static files, it can't run a Python process or connect to a database, this isn't a difficulty question, it's a category mismatch). GitHub Codespaces (technically possible, but still requires a GitHub account and manual setup steps, not meaningfully simpler than the README path). Staying local-only and doing a live demo in person.
+
+**Chosen Approach:** Deployed to Render because it's a free web service running the FastAPI app plus a free managed Postgres database, connected through an environment variable.
+
+**Advantages:** A single URL that works from any device, no install required. Doubles as the live demo and the fallback if an in-person demo has technical issues.
+
+**Disadvantages:** Free-tier web services spin down after 15 minutes idle (roughly a minute to wake back up on the next visit). Free Postgres expires 30 days after creation.
+
+**Tradeoffs:** Traded some polish (the cold-start delay) for something no local setup could offer: a link that works for anyone, on any machine, with zero configuration.
+
+**Risks:** Low for submission timing — the 30-day database window comfortably covers the deadline. Longer-term, the live link isn't permanent without upgrading the database to a paid instance.
+
+**Future Improvements:** A custom domain, or moving to a paid instance if the project needs to stay live past 30 days.
+
+**One-Sentence Defense:** A link a grader can open on their phone is worth more than a perfectly documented local setup nobody has to actually use.
+
+---
+
+## seed.py for Reproducible Demo Data
+
+**Problem:** A freshly deployed database has empty tables. Cloning the repo copies code and schema migrations, not rows — the dashboard would load with nothing in it, which looks broken even though every workflow underneath works.
+
+**Alternatives Considered:** A SQL dump of my local database (fragile, versions have to match, more manual steps). Manually creating sample data through Swagger every time (not repeatable, easy to forget).
+
+**Chosen Approach:** A small script that inserts a fixed set of sample transporters and transport requests, checking row counts first so it's safe to run more than once.
+
+**Advantages:** One command gets any fresh database (local or deployed) into a usable demo state. Doesn't touch the application code or add any new endpoint.
+
+**Disadvantages:** Not a real feature. If someone actually assigns and completes the seeded requests (which is expected, normal use of the app), the sample requests disappear from the active queue, since completed requests are correctly filtered out of the dashboard view.
+
+**Tradeoffs:** Chose a one-time idempotent script over an automatic per-visit reset. An automatic reset would mean nothing anyone does through the real assign/complete workflow actually persists, which undermines the entire point of demonstrating a working, stateful system.
+
+**Risks:** Low. It only inserts rows, and only when tables are empty.
+
+**Future Improvements:** A manual reset command that clears and re-seeds on demand, for restoring a clean demo state before a specific presentation.
+
+**One-Sentence Defense:** A database with no data doesn't prove the app works, rather a database with realistic sample data does.
+
+---
+
+## Alembic env.py Wasn't Reading DATABASE_URL From the Environment
+
+**Problem:** The Render deploy failed during `alembic upgrade head` with "connection to server at localhost... Connection refused," despite DATABASE_URL being set correctly in Render's environment.
+
+**Root Cause:** `migrations/env.py` built its database connection entirely from `alembic.ini`'s `sqlalchemy.url` line, hardcoded to `postgresql://localhost/vectris`. It never read the environment at all. This worked locally purely by coincidence because my own machine happens to run Postgres at localhost too, so the hardcoded value and the real one were identical, and the bug never had a chance to show up.
+
+**Alternatives Considered:** Editing alembic.ini directly per environment (fragile, means a different ini file per machine, works against the entire point of environment variables).
+
+**Chosen Approach:** Added three lines to env.py that read `DATABASE_URL` from the environment and override whatever alembic.ini has, before the migration engine gets built.
+
+**Advantages:** Migrations now always target the same database the running app connects to, on any machine.
+
+**Disadvantages:** There aren't any at this time, this is a bug fix, not a new capability.
+
+**Risks:** None. The override only applies when DATABASE_URL is actually set; without it, the old ini-based behavior is unchanged.
+
+**Future Improvements:** None needed.
+
+**One-Sentence Defense:** A migration tool that ignores your environment variables will always look correct on your own machine and fail everywhere else.
+
+---
+
+## Dashboard Visual Redesign
+
+**Problem:** The original dashboard was plain HTML tables with no styling. Functional, but it didn't demonstrate any layout or design work, which are graded separately from backend logic.
+
+**Alternatives Considered:** A CSS framework like Bootstrap or Tailwind (rejected because it would add a dependency and a build step that doesn't fit the no-build-pipeline decision already made for the frontend). Leaving it unstyled and relying entirely on the backend work to carry the grade.
+
+**Chosen Approach:** A single hand-written CSS file using CSS custom properties for color and typography, applied consistently across all four screens: a dark background, a five-color palette mapped to specific meanings (myrtle green for available/positive states, auburn for requests waiting in the queue, scarlet reserved for biohazard flags only), and three typefaces split by role (a display font for the wordmark only, a heading font for labels, a monospace body font for everything else).
+
+**Advantages:** Consistent look across every screen, no new dependencies, still just Jinja2 templates and one CSS file with no build step added.
+
+**Disadvantages:** More CSS to maintain by hand than a framework would require.
+
+**Tradeoffs:** Chose hand-written CSS and a bit more manual work over a framework, to keep the "no build pipeline" decision intact.
+
+**Risks:** Low. Pure presentation layer, no route or service logic touched.
+
+**Future Improvements:** A dark/light mode toggle, though not needed for the MVP.
+
+**One-Sentence Defense:** The three MVP workflows already worked and this made them look like they were built on purpose.
