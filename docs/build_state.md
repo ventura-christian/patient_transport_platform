@@ -1,6 +1,6 @@
 # BUILD STATE
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 Completed:
 
@@ -48,14 +48,19 @@ Completed:
 - assignment_service.py: create_assignment now allows multiple transporters per request, up to transporters_required
 - transport_request_service.py: update_status blocks completion until a request is fully staffed
 - python-multipart added for HTML form parsing
+- frontend/static/css/style.css — dark theme design system (colors, typography, spacing) applied to all four screens
+- main.py — static file mount and root-to-dashboard redirect
+- seed.py — idempotent sample data script for transporters and transport requests
+- migrations/env.py — now reads DATABASE_URL from the environment; previously hardcoded to alembic.ini's localhost default, which only worked locally by coincidence
+- Deployed to Render (web service + managed Postgres)
 
 In Progress:
 
-- None
+(none)
 
 Broken:
 
-- None
+(none)
 
 Not Started:
 
@@ -73,7 +78,8 @@ Technical Debt:
 - Cascade behavior on foreign key deletes not defined
 - Dashboard checks each in-progress request's assignment count with a separate query per row, not one join. Fine at this scale, would need a rewrite if the queue grew large.
 - requirements.txt had an unpinned dependency list and one literal placeholder line for python-multipart. Fixed alongside this update.
+- Free-tier Render Postgres expires 30 days after creation. Fine for submission timing, but the live link will break after that window unless the database is upgraded or recreated.
 
 Next Task:
 
-- (Potential Idea): Add the dashboard's delayed panel
+- Full manual testing pass, then presentation materials
