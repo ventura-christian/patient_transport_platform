@@ -5,24 +5,11 @@ block content %}
 <div class="hint">
   <strong>Vectris</strong>
   is a hospital patient transport dispatch demo (for educational purposes only)
-  created by Christian Ventura. This dashboard simulates the software a hospital
-  transport dispatcher uses to manage patient transport requests across a
-  hospital. The
-  <strong>Transport Queue</strong>
-  panel lists requests waiting for a transporter. The status of the request will
-  be shown there. The
-  <strong>Assign</strong>
-  or
-  <strong>View</strong>
-  buttons next to the transport requests, allow you to interact with the
-  transport request in real time. The
-  <strong>Transport Staff</strong>
-  panel shows the available transporters on staff right now and will denote
-  their status (available, on job, on break). Use
+  created by Christian Ventura. Use
   <strong>New Request</strong>
-  in the top right to submit a new transport request. Use
+  in the top right to submit a new transport request or
   <strong>Dashboard</strong>
-  to return to the dashboard.
+  to return here.
 </div>
 
 <section class="stats">
@@ -43,6 +30,15 @@ block content %}
 <div class="dashboard-grid">
   <section class="panel">
     <h2>Transport Queue</h2>
+
+    <p class="hint">
+      Requests waiting for a transporter, with their current status shown next
+      to each one. Use
+      <strong>Assign</strong>
+      or
+      <strong>View</strong>
+      to interact with a request in real time.
+    </p>
 
     {% for req in active_requests %}
     <div class="request-card">
@@ -85,6 +81,15 @@ block content %}
 
   <section class="panel">
     <h2>Transport Staff</h2>
+
+    <p class="hint">
+      Transporters on staff right now, along with their current status (
+      <strong>available</strong>
+      or
+      <strong>on job</strong>
+      ).
+    </p>
+
     {% for t in transporters %}
     <div class="staff-card">
       <span class="staff-name">{{ t.name }}</span>
