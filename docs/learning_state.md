@@ -1,6 +1,6 @@
 # LEARNING STATE
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 Understood:
 
@@ -64,6 +64,12 @@ Understood:
 - Reading a raw traceback to diagnose a library version-compatibility bug, not a mistake in my own code
 - Telling the difference between a business-rule gap worth fixing now and one worth only documenting
 - Resolving a stale git index.lock file
+- FastAPI's StaticFiles mount and why serving CSS requires it explicitly
+- CSS custom properties as design tokens, and why one :root block beats scattered hex values
+- Why Alembic's env.py has its own separate database config from the app's runtime code, and why a bug there can hide for weeks if your local environment happens to match the hardcoded fallback
+- Deploying a FastAPI + Postgres app to a PaaS: build commands vs. start commands, environment variables in production, free-tier constraints (spin-down, storage limits, no shell access)
+- Database seeding as an idempotent script, separate from schema migrations
+- HTTP redirects via RedirectResponse
 
 Partially Understood:
 
@@ -77,4 +83,4 @@ Not Learned Yet:
 
 Current Learning Objective:
 
-- Add the dashboard's delayed panel and transporter current-assignment lookup, then fill out docs/testing_checklist.md
+- Full manual testing pass, then presentation materials
