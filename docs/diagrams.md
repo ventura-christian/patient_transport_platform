@@ -1,5 +1,7 @@
 # DIAGRAMS
 
+> Last Updated: July 4, 2026
+
 This file holds the visual and structural references for how a transport request moves through Vectris, how the three tables relate to each other, and what each dashboard screen shows.
 
 ## Transport Request Status
@@ -66,7 +68,7 @@ erDiagram
 
 Four screens, drawn from the wireframe I built for this project and checked against entities.md and decisions.md.
 
-- **Dashboard:** A header, then three panels: the active request queue sorted oldest first, the list of available transporters, and a delayed panel showing anything still active past a set time threshold.
+- **Dashboard:** A header, three stat cards (waiting, in progress, available staff), then two panels: the request queue (active and in-progress requests together, oldest first) and the transport staff list. Visual design decisions (color, typography) are logged separately in decisions.md.
 
 - **Create Request:** Patient name, origin department (dropdown), origin room (text), destination department (dropdown), equipment needed (dropdown), biohazard (checkbox), transporters required (number, defaults to 1), and a submit button.
 
@@ -74,4 +76,4 @@ Four screens, drawn from the wireframe I built for this project and checked agai
 
 - **Job Detail:** Patient name, department, assigned transporter, and current status, with a button to update the status.
 
-No priority field anywhere. No status history timeline. I cut both once I checked the wireframe against decisions already made. The queue's sort order is the only priority signal Vectris has, and nothing tracks status changes over time.
+No priority field anywhere. No status history timeline, no delayed panel. All three were cut once checked against decisions already made. The queue's sort order is the only priority signal Vectris has, and nothing tracks status changes over time.
