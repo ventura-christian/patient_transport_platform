@@ -1,6 +1,6 @@
 # TESTING CHECKLIST
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 A manual reference for testing Vectris endpoints through Swagger UI while there's no automated test suite yet. Not a replacement for real tests, just a repeatable way to confirm my endpoints work.
 
@@ -66,3 +66,11 @@ Reference `entities.md` in my directory at `app/models/entities.md`. This docume
 - Assign one transporter: confirm the dashboard shows "Assign More" next to it, and Job Detail shows "needs 2, has 1" instead of a Mark Complete button
 - Assign a second transporter: confirm "Assign More" disappears from the dashboard and Mark Complete appears on Job Detail
 - Complete the request: confirm both transporters return to "available"
+
+## Live Deployment (Render)
+
+- Visit the live URL with no path: confirm it redirects to /dashboard, not a 404
+- Confirm the dashboard loads with the seeded sample transporters and requests
+- Confirm the stylesheet actually loaded (dark background, styled cards). A blank white page with plain text means /static isn't mounted correctly
+- Run through all three MVP workflows against the live database: create a request, assign a transporter, mark complete
+- Reload after 15+ minutes idle: confirm the cold-start delay is a loading page, not an error
