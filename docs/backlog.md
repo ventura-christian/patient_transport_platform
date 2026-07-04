@@ -1,14 +1,10 @@
 # BACKLOG
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 ## Up Next
 
-- (Potential Idea) Dashboard delayed panel, derived from time in queue
-- Transporter Staff panel: show current assignment for on_job transporters
-- Fill out docs/testing_checklist.md for Transport Requests and Assignments
-- Fix README.md Running Locally section (missing database-creation step)
-- Pin requirements.txt to known-working versions
+- Full manual pass through testing_checklist.md
 - Presentation materials
 
 ## Known Technical Debt
