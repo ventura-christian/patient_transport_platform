@@ -2,7 +2,9 @@
 
 Hospital Patient Transport Operations Platform
 
-> Last Project Update: July 3, 2026
+> Last Project Update: July 4, 2026
+
+Live Demo: [CLICK ME](<https://vectris.onrender.com/dashboard>)
 
 ## Project Overview
 
@@ -234,7 +236,7 @@ Frontend Verification & Polish
 
 ### Current Focus
 
-All three MVP workflows work end to end through the dispatcher dashboard: create a request, assign a transporter, complete a request. Remaining work is the dashboard's delayed panel, a full testing pass, and presentation materials.
+All three MVP workflows work end to end through the dispatcher dashboard: create a request, assign a transporter, complete a request. The dashboard, create request, assign, and job detail screens all share a common dark-theme visual design. The app is deployed live on Render with sample data pre-loaded.
 
 ## Running Locally
 
@@ -313,7 +315,7 @@ Open `http://127.0.0.1:8000` in a browser to reach the dispatcher dashboard, or 
 
 ### Current Status
 
-All three MVP workflows are functional through the dashboard. See `docs/build_state.md` for exactly what's working right now.
+All three MVP workflows are functional through the dashboard, styled, and live at the URL above. See `docs/build_state.md` for exactly what's working right now.
 
 ## Repository Structure
 
