@@ -1,6 +1,6 @@
 # Repository Map
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 ## Purpose(repository map)
 
@@ -230,7 +230,8 @@ Implements the dispatcher dashboard.
 
 The dashboard exists to support operational awareness rather than data entry.
 
-- frontend/templates/ now holds the actual Jinja2 template files: base.html, dashboard.html, create_request.html, assign.html, and job_detail.html.
+- frontend/templates/ holds the Jinja2 template files: base.html, dashboard.html, create_request.html, assign.html, and job_detail.html.
+- frontend/static/css/style.css holds the shared design system (colors, typography, spacing) applied across all four screens.
 
 ---
 
@@ -348,3 +349,13 @@ Defines Python dependencies required by the application.
 ### Guiding Principle(requirements.txt)
 
 Dependencies should remain minimal and directly support the MVP.
+
+## seed.py
+
+### Purpose(seed.py)
+
+A one-time script that loads sample transporters and transport requests into whatever database it's pointed at. Not part of the application itself but rather, it's run manually, once, against a fresh database (local or deployed).
+
+### Guiding Principle(seed.py)
+
+Keeps demo data out of the schema migrations, where it doesn't belong, while still making a fresh database usable immediately.
