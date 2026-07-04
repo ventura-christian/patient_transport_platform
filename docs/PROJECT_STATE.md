@@ -1,10 +1,10 @@
 # PROJECT_STATE
 
-> Last Updated: July 2, 2026
+> Last Updated: July 4, 2026
 
 ## Current Phase
 
-Frontend Verification & Polish
+Deployment and Submission Prep
 
 ## Project Summary
 
@@ -64,11 +64,21 @@ Completed:
 - Job Detail screen with request completion
 - All three MVP workflows (create, assign, complete) reachable end to end through the dashboard
 - Multiple transporters per request now enforced, not just stored
+- Dashboard, Create Request, Assign, and Job Detail screens restyled with a shared dark-theme design system
+- Static file serving added via FastAPI's StaticFiles mount
+- seed.py created for reproducible sample data
+- alembic/env.py fixed to read DATABASE_URL from the environment instead of a hardcoded ini value
+- Deployed live on Render with a working web service and Postgres database
+- Root URL redirects to /dashboard
+- Short on-page instructions added to the dashboard for first-time visitors
 
 In Progress:
 
-- Dashboard delayed panel
-- Transporter Staff panel showing current assignment
+(none)
+
+Descoped:
+
+- Dashboard delayed panel and transporter current-assignment display were dropped deliberately. Neither is one of the three MVP workflows, and the remaining time before submission was worth more spent on the visual design and live deployment, which map to actual graded criteria.
 
 Not Started:
 
@@ -103,7 +113,6 @@ Architecture:
 
 ## Next Actions
 
-1. Add the dashboard's delayed panel and transporter current-assignment lookup
-2. Fill out docs/testing_checklist.md for all four screens
-3. Fix README setup instructions and pin requirements.txt
-4. Presentation materials
+1. Full manual pass through docs/testing_checklist.md
+2. Presentation materials
+3. Final proofread of all docs before submission
