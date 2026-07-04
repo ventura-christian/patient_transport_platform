@@ -2,9 +2,10 @@
 
 Hospital Patient Transport Operations Platform
 
-> Last Project Update: July 4, 2026
+---
 
 Live Demo: [CLICK ME](<https://vectris.onrender.com/dashboard>)
+> First load may take ~30-60 seconds if the app has been idle. The platform is spinning back up on a free instance, not broken.
 
 ## Project Overview
 
